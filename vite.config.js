@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 const launchHosts = [
+  'bloomin-production.up.railway.app',
   'bloomin.institute',
   'www.bloomin.institute',
   'bloomin.foundation',

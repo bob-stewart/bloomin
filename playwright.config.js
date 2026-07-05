@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const hostResolverRules = [
+  'MAP bloomin-production.up.railway.app 127.0.0.1',
   'MAP bloomin.institute 127.0.0.1',
   'MAP www.bloomin.institute 127.0.0.1',
   'MAP bloomin.foundation 127.0.0.1',

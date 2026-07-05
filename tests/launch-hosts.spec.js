@@ -27,6 +27,21 @@ const hostCases = [
   }
 ];
 
+const allowedHosts = [
+  'bloomin-production.up.railway.app',
+  ...hostCases.map((site) => site.host)
+];
+
+for (const host of allowedHosts) {
+  test(`${host} is accepted by the preview server`, async ({ request }) => {
+    const response = await request.get('http://127.0.0.1:4173/', {
+      headers: { Host: host }
+    });
+
+    expect(response.status()).toBe(200);
+  });
+}
+
 for (const site of hostCases) {
   test(`${site.host} renders hostname-specific launch copy`, async ({ page }) => {
     await page.goto(`http://${site.host}:4173/`);
