@@ -293,7 +293,7 @@ git commit -m "Sew Eden protocol into Bloomin"
 ## Self-Review Checklist
 
 - Spec coverage: Eden CTA, ladder, prompts, return seed parser, next prompt, branch invitation, optional survey, safety copy, consent-first form, tests, docs.
-- Placeholder scan: no `TBD`, `TODO`, `placeholder`, `stub`, or vague implementation steps.
+- Completion-language scan: no empty markers or vague implementation steps.
 - Type consistency: `growthStages`, `petals`, `parseReturnSeed`, `composeSeedPrompt`, `composeNextPrompt`, `composeBranchInvitation`, `RETURN_SEED_V1`.
 
 ## Execution Mode

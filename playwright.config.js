@@ -14,6 +14,7 @@ const hostResolverRules = [
 
 export default defineConfig({
   testDir: './tests',
+  testMatch: '**/*.spec.js',
   timeout: 30_000,
   webServer: {
     command: 'npm start',

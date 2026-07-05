@@ -2,20 +2,17 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   ArrowRight,
-  BookOpen,
   CircleDot,
-  Compass,
   Flower2,
   HandHeart,
-  Heart,
   Landmark,
   Leaf,
   Microscope,
-  Network,
   ShieldCheck,
   Sprout
 } from 'lucide-react';
 import './styles.css';
+import { SeedKindEden } from './SeedKindEden.jsx';
 
 const sites = [
   {
@@ -374,6 +371,7 @@ function App() {
         </a>
         <nav className="navlinks" aria-label="Primary">
           <a href="#role">Role</a>
+          <a href="#eden">Plant a Seed</a>
           <a href="#bloom-cycle">Cycle</a>
           <a href="#constitution">Constitution</a>
           <a href="#ecosystem">Sites</a>
@@ -392,6 +390,10 @@ function App() {
                 <span>{site.cta}</span>
                 <ArrowRight aria-hidden="true" size={18} />
               </a>
+              <a className="button seedCta" href="#eden">
+                <Sprout aria-hidden="true" size={18} />
+                <span>Plant a Seed</span>
+              </a>
               <a className="quietLink" href="#bloom-cycle">
                 See the cycle
               </a>
@@ -401,6 +403,7 @@ function App() {
         </section>
 
         <DomainRole site={site} />
+        <SeedKindEden sourceDomain={site.host} />
         <BloomCycle />
         <BloomConstitution />
         <EcosystemMap currentSite={site} />
