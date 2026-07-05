@@ -36,6 +36,22 @@ const allowedHosts = [
   ...hostCases.flatMap((site) => [site.host, `www.${site.host}`])
 ];
 
+const validReturnSeed = `RETURN_SEED_V1
+stage: Soil
+petal: Whole Garden
+within: A buried dream still has warmth.
+between: Family duty shaped the soil.
+beyond: I want this to give shade.
+buried_dream: Writing music in public.
+survival_wisdom: I set it aside to keep a stable home.
+living_seed: I still hear melodies.
+weathered_strength: Endurance and listening.
+shade_to_give: Encouragement for others who buried art.
+root_boundary: One evening a week protected for practice.
+practice: Hum for five minutes after dinner.
+next_prompt_request: Help me move from Soil to Seed.
+END_RETURN_SEED_V1`;
+
 for (const host of allowedHosts) {
   test(`${host} is accepted by the preview server`, async ({ request }) => {
     const response = await request.get('http://127.0.0.1:4173/', {
@@ -56,6 +72,7 @@ for (const site of hostCases) {
     await expect(page.getByRole('link', { name: site.cta, exact: true })).toBeVisible();
     await expect(page.locator('.site')).toHaveClass(new RegExp(`site-${site.theme}`));
     await expect(page.getByText(site.role, { exact: true }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Plant a Seed', exact: true }).first()).toBeVisible();
 
     const cycle = page.locator('#bloom-cycle');
     await expect(cycle).toBeVisible();
@@ -69,6 +86,27 @@ for (const site of hostCases) {
     await expect(constitution).toContainText('Stewardship over extraction');
     await expect(constitution).toContainText('Technology as root system');
     await expect(constitution).toContainText("Bloomin' as practice");
+
+    const eden = page.locator('#eden');
+    await expect(eden).toBeVisible();
+    for (const stage of ['Soil', 'Seed', 'Shoot', 'Root', 'Stalk', 'Leaf', 'Bud', 'Petal', 'Bloom']) {
+      await expect(eden.locator('.ladder')).toContainText(stage);
+    }
+    await expect(eden.getByRole('button', { name: 'Begin at Soil', exact: true })).toBeVisible();
+    await expect(eden.getByRole('button', { name: 'Copy Seed Prompt', exact: true })).toBeVisible();
+    await expect(eden).toContainText('well come');
+
+    await eden.getByRole('button', { name: 'Tend Returned Seed', exact: true }).click();
+    await expect(eden).toContainText('Consent is required');
+
+    await eden.getByLabel('Returned seed text').fill(validReturnSeed);
+    await eden
+      .getByLabel('I choose to return this seed to Eden on this page for tending and learning.')
+      .check();
+    await eden.getByRole('button', { name: 'Tend Returned Seed', exact: true }).click();
+    await expect(eden).toContainText('Seed received by Eden on this page');
+    await expect(eden).toContainText('Next prompt: Seed');
+    await expect(eden.getByRole('button', { name: 'Copy Next Prompt', exact: true })).toBeVisible();
 
     const horizontalOverflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth

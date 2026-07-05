@@ -23,6 +23,26 @@ site system. The implementation stays frontend-only and Railway-friendly:
   -> Know with lightweight CSS motion and reduced-motion support.
 - No backend, auth, CMS, dashboards, or heavy animation dependencies are added.
 
+## Eden: SeedKind Protocol
+
+Eden adds the first living ritual to the sites. Visitors can click
+`Plant a Seed`, copy a SeedKind prompt, run it in their own ChatGPT, and paste
+back a plain-text `RETURN_SEED_V1` block only if they choose.
+
+The SeedKind ladder is:
+
+```text
+Soil -> Seed -> Shoot -> Root -> Stalk -> Leaf -> Bud -> Petal -> Bloom
+```
+
+The first implementation is copy/paste-first and sovereign by design:
+
+- Prompt reflection happens in the visitor's own ChatGPT.
+- Nothing is sent across the network by the Eden return form.
+- Returned seeds are validated locally on the page.
+- Eden composes the next stacking prompt from the returned seed.
+- Branch invitations are copyable and framed as welcome, not recruitment.
+
 ## Local
 
 ```bash
@@ -33,13 +53,15 @@ npm run dev
 ## Verification
 
 ```bash
+npm test
 npm run build
 npm run test:smoke:hosts
 ```
 
-The Playwright smoke suite verifies all accepted hostnames, each domain's
-identity and CTA, the hero SVG, the Bloom Cycle, the Shared Bloom Constitution,
-and desktop/mobile overflow guardrails.
+The unit suite verifies the SeedKind protocol parser and prompt composers. The
+Playwright smoke suite verifies all accepted hostnames, each domain's identity
+and CTA, the hero SVG, Eden, the Bloom Cycle, the Shared Bloom Constitution, and
+desktop/mobile overflow guardrails.
 
 ## Railway
 

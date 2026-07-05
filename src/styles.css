@@ -576,6 +576,325 @@ section {
   font-weight: 850;
 }
 
+.seedCta {
+  background: var(--accent-strong);
+}
+
+.eden {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255, 253, 247, 0.74), rgba(232, 240, 225, 0.58)),
+    rgba(255, 253, 247, 0.64);
+}
+
+.edenShell {
+  display: grid;
+  gap: 24px;
+}
+
+.edenIntro {
+  margin-bottom: 0;
+}
+
+.edenNotice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  max-width: 920px;
+  padding: 18px 20px;
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+  border-radius: 8px;
+  color: var(--soil);
+  background: rgba(255, 253, 247, 0.72);
+}
+
+.edenNotice svg {
+  color: var(--accent);
+  margin-top: 2px;
+}
+
+.edenNotice p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.ladder {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.ladder li {
+  min-height: 52px;
+  display: grid;
+  place-items: center;
+  padding: 10px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--soil-soft);
+  background: rgba(255, 253, 247, 0.64);
+  font-size: 0.9rem;
+  font-weight: 830;
+  text-align: center;
+  letter-spacing: 0;
+}
+
+.ladder li.active {
+  color: var(--paper);
+  border-color: transparent;
+  background: var(--accent-strong);
+}
+
+.promptGarden {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.42fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.edenActions {
+  display: grid;
+  gap: 10px;
+}
+
+.edenAction,
+.textButton,
+.copyButton {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--soil);
+  background: rgba(255, 253, 247, 0.72);
+  font: inherit;
+  font-weight: 820;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.edenAction {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 12px 14px;
+}
+
+.edenAction svg,
+.textButton svg,
+.copyButton svg {
+  flex: 0 0 auto;
+  color: var(--accent);
+}
+
+.edenAction.active,
+.edenAction:hover,
+.textButton:hover,
+.copyButton:hover {
+  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+  background: var(--paper);
+}
+
+.selectorRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.selectorRow label,
+.formGrid label,
+.wideField {
+  display: grid;
+  gap: 7px;
+  color: var(--soil);
+  font-weight: 820;
+  letter-spacing: 0;
+}
+
+.selectorRow span,
+.formGrid span,
+.wideField span {
+  font-size: 0.92rem;
+}
+
+select,
+input,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  color: var(--ink);
+  background: rgba(255, 253, 247, 0.82);
+  font: inherit;
+  letter-spacing: 0;
+}
+
+select,
+input {
+  min-height: 44px;
+  padding: 10px 12px;
+}
+
+textarea {
+  padding: 12px;
+  resize: vertical;
+}
+
+.promptPanel,
+.returnSeedForm,
+.nextPrompt,
+.branchInvite {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 253, 247, 0.78);
+  box-shadow: 0 18px 46px rgba(59, 49, 40, 0.055);
+}
+
+.promptPanel {
+  display: grid;
+  gap: 16px;
+}
+
+.promptPanel h3,
+.returnSeedHead h3,
+.nextPrompt h3,
+.branchInvite h3 {
+  margin: 8px 0 0;
+  color: #202820;
+  font-size: 1.6rem;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.promptPanel p,
+.returnSeedHead p,
+.branchInvite p {
+  color: var(--muted);
+  line-height: 1.62;
+}
+
+.copyControl {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.copyButton {
+  padding: 10px 14px;
+}
+
+.copyStatus {
+  min-height: 22px;
+  color: var(--accent-strong);
+  font-size: 0.92rem;
+  font-weight: 780;
+}
+
+.promptText {
+  max-height: 430px;
+  overflow: auto;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid rgba(50, 48, 41, 0.12);
+  border-radius: 8px;
+  color: #263028;
+  background: rgba(255, 255, 255, 0.56);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.88rem;
+  line-height: 1.56;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.returnSeedForm {
+  display: grid;
+  gap: 18px;
+}
+
+.returnSeedHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: start;
+}
+
+.textButton {
+  flex: 0 0 auto;
+  padding: 10px 14px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.consentBox {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  color: var(--soil);
+  font-weight: 740;
+  line-height: 1.45;
+}
+
+.consentBox input {
+  width: 18px;
+  min-height: auto;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--accent-strong);
+}
+
+.formSubmit {
+  width: fit-content;
+  border: 0;
+  cursor: pointer;
+}
+
+.parserFeedback {
+  padding: 16px;
+  border-radius: 8px;
+  line-height: 1.55;
+}
+
+.parserFeedback p {
+  margin: 0;
+}
+
+.parserFeedback ul {
+  margin: 10px 0 0;
+  padding-left: 20px;
+}
+
+.parserFeedback.success {
+  border: 1px solid color-mix(in srgb, var(--accent) 36%, transparent);
+  color: var(--accent-strong);
+  background: color-mix(in srgb, var(--accent-soft) 70%, white);
+}
+
+.parserFeedback.error {
+  border: 1px solid rgba(177, 88, 68, 0.34);
+  color: #74372c;
+  background: rgba(253, 234, 226, 0.72);
+}
+
+.nextPrompt,
+.branchInvite {
+  display: grid;
+  gap: 16px;
+}
+
 @keyframes orbitSpin {
   to {
     transform: rotate(360deg);
@@ -621,6 +940,22 @@ section {
   }
 
   .cycleList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ladder {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .promptGarden {
+    grid-template-columns: 1fr;
+  }
+
+  .edenActions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .formGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -685,6 +1020,10 @@ section {
   .constitutionGrid {
     grid-template-columns: 1fr;
   }
+
+  .returnSeedHead {
+    display: grid;
+  }
 }
 
 @media (max-width: 620px) {
@@ -735,6 +1074,19 @@ section {
 
   .practiceList li {
     min-height: auto;
+  }
+
+  .ladder,
+  .edenActions,
+  .selectorRow,
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formSubmit,
+  .textButton,
+  .copyButton {
+    width: 100%;
   }
 }
 
