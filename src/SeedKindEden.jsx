@@ -171,8 +171,8 @@ export function SeedKindEden({ sourceDomain }) {
           <p className="kicker">SeedKind Eden Protocol</p>
           <h2 id="eden-title">Plant a seed in your own ChatGPT.</h2>
           <p>
-            Eden gives you copyable prompts. The conversation belongs to you. Nothing
-            leaves your own ChatGPT unless you choose to return a seed here.
+            Eden gives you copyable prompts we call seeds. The conversation belongs to
+            you. Nothing leaves your own ChatGPT unless you choose to return a seed here.
           </p>
         </div>
 
