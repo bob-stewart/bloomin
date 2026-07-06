@@ -48,6 +48,11 @@ button:focus-visible {
   outline-offset: 4px;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.66;
+}
+
 .topbar {
   position: sticky;
   top: 0;
@@ -870,6 +875,31 @@ textarea {
 
 .parserFeedback p {
   margin: 0;
+}
+
+.resultMeta {
+  margin-top: 8px !important;
+  color: var(--soil-soft);
+  font-size: 0.92rem;
+  font-weight: 760;
+}
+
+.bloomGuidance {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  border-radius: 8px;
+  background: rgba(255, 253, 247, 0.64);
+}
+
+.bloomGuidance p {
+  color: var(--soil);
+}
+
+.bloomGuidance strong {
+  color: var(--accent-strong);
 }
 
 .parserFeedback ul {

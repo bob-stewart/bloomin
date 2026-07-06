@@ -64,6 +64,37 @@ for (const host of allowedHosts) {
 
 for (const site of hostCases) {
   test(`${site.host} renders hostname-specific embodied vision`, async ({ page }) => {
+    await page.route('**/api/seed-return', async (route) => {
+      const payload = route.request().postDataJSON();
+
+      expect(payload.sourceDomain).toBe(site.host);
+      expect(payload.consentToReturn).toBe(true);
+      expect(payload.returnSeedText).toContain('RETURN_SEED_V1');
+
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          ok: true,
+          id: '11111111-2222-4333-8444-555555555555',
+          stored: true,
+          seed: {
+            stage: 'Soil',
+            nextStage: 'Seed',
+            petal: 'Whole Garden',
+            reflectiveFieldCount: 9
+          },
+          nextPrompt: 'You are SeedKind. Begin at Seed and carry the living seed forward.',
+          bloom: {
+            source: 'openrouter',
+            message: 'The living seed is still warm.',
+            practice: 'Hum for five minutes after dinner.',
+            question: 'What small sound wants daylight?'
+          }
+        })
+      });
+    });
+
     await page.goto(`http://${site.host}:4173/`);
 
     await expect(page.locator('#hero')).toBeVisible();
@@ -104,8 +135,10 @@ for (const site of hostCases) {
       .getByLabel('I choose to return this seed to Eden on this page for tending and learning.')
       .check();
     await eden.getByRole('button', { name: 'Tend Returned Seed', exact: true }).click();
-    await expect(eden).toContainText('Seed received by Eden on this page');
+    await expect(eden).toContainText('Seed returned to Eden');
     await expect(eden).toContainText('Next prompt: Seed');
+    await expect(eden).toContainText('The living seed is still warm');
+    await expect(eden).toContainText('Stored seed: 11111111');
     await expect(eden.getByRole('button', { name: 'Copy Next Prompt', exact: true })).toBeVisible();
 
     const horizontalOverflow = await page.evaluate(
