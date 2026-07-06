@@ -20,6 +20,54 @@ import {
 } from './seedkind.mjs';
 import seedPacketsImage from './assets/bloomin-apothecary-seed-packets.avif';
 
+const seedPackets = [
+  {
+    id: 'soil',
+    name: 'Begin in Soil',
+    stage: 'Soil',
+    petal: 'Whole Garden',
+    packetNo: '01',
+    herb: 'Chamomile / dark loam',
+    copy: 'For unclear ground, tired courage, and telling the truth without hurry.'
+  },
+  {
+    id: 'health',
+    name: 'Tend the Body',
+    stage: 'Soil',
+    petal: 'Health',
+    packetNo: '02',
+    herb: 'Calendula / clean water',
+    copy: 'For energy, ache, rhythm, nourishment, mercy, and the body asking to be heard.'
+  },
+  {
+    id: 'family',
+    name: 'Family Roots',
+    stage: 'Root',
+    petal: 'Family',
+    packetNo: '03',
+    herb: 'Rosemary / old wood',
+    copy: 'For kinship, inherited weather, repair, belonging, and what still gives shade.'
+  },
+  {
+    id: 'craft',
+    name: 'Work & Craft',
+    stage: 'Seed',
+    petal: 'Work / Craft',
+    packetNo: '04',
+    herb: 'Basil / warm window',
+    copy: 'For buried vocation, tolerated work, and the craft that still wants to become matter.'
+  },
+  {
+    id: 'giving',
+    name: 'Giving Shade',
+    stage: 'Bloom',
+    petal: 'Giving',
+    packetNo: '05',
+    herb: 'Lavender / open hand',
+    copy: 'For generosity with boundaries, contribution without depletion, and clean pollination.'
+  }
+];
+
 const initialSeed = `RETURN_SEED_V1
 stage: Soil
 petal: Whole Garden
@@ -70,6 +118,7 @@ function CopyButton({ text, label, copiedLabel = 'Copied' }) {
 export function SeedKindEden({ sourceDomain }) {
   const [stage, setStage] = useState('Soil');
   const [petal, setPetal] = useState('Whole Garden');
+  const [selectedPacketId, setSelectedPacketId] = useState('soil');
   const [returnedSeed, setReturnedSeed] = useState('');
   const [consent, setConsent] = useState(false);
   const [contactAllowed, setContactAllowed] = useState(false);
@@ -88,6 +137,8 @@ export function SeedKindEden({ sourceDomain }) {
     [stage, petal]
   );
   const activeStage = stageDetails[stage];
+  const selectedPacket =
+    seedPackets.find((packet) => packet.id === selectedPacketId) || seedPackets[0];
   const parsedSeed = result?.seed || null;
   const nextPrompt =
     result?.nextPrompt ||
@@ -168,21 +219,27 @@ export function SeedKindEden({ sourceDomain }) {
     setReturnOpen(true);
   }
 
+  function choosePacket(packet) {
+    setSelectedPacketId(packet.id);
+    setStage(packet.stage);
+    setPetal(packet.petal);
+    setResult(null);
+  }
+
   return (
     <section id="eden" className="eden" aria-labelledby="eden-title">
       <div className="edenShell">
-        <div className="edenThreshold">
+        <div className="edenRitual">
           <div className="sectionIntro edenIntro">
             <p className="kicker">SeedKind Eden / private apothecary</p>
-            <h2 id="eden-title">Choose a seed packet. Bring back only the label.</h2>
+            <h2 id="eden-title">Choose the packet that feels closest.</h2>
             <p>
-              Start with Soil if you are unsure. The packet opens in your own ChatGPT
-              and asks one careful question at a time. Bloomin sees nothing unless you
-              return the label.
+              Pick one by feel. Copy it into your own ChatGPT. It will ask one careful
+              question at a time and leave the story with you.
             </p>
             <p className="edenPromise">
-              Keep the story yours. Return only what is alive, what weather shaped it,
-              what boundary protects it, and one small practice.
+              If something true comes back, return only the label: what is alive, what
+              weather shaped it, what boundary protects it, and one small practice.
             </p>
           </div>
 
@@ -196,17 +253,39 @@ export function SeedKindEden({ sourceDomain }) {
               loading="lazy"
               decoding="async"
             />
-            <figcaption>Seed packets, labels, and living remedies.</figcaption>
+            <figcaption>The packet opens privately. Eden tends only the label.</figcaption>
           </figure>
         </div>
 
-        <div className="edenNotice" role="note">
-          <ShieldCheck aria-hidden="true" size={20} />
-          <p>
-            Your first conversation stays yours. Eden receives only a consented
-            RETURN_SEED_V1 label: stage, petal, within, between, beyond, buried dream,
-            weathered strength, shade to give, boundary, practice, and the next question.
-          </p>
+        <div className="packetShelf" aria-label="Seed packet choices">
+          {seedPackets.map((packet) => (
+            <button
+              className={
+                packet.id === selectedPacketId ? 'seedPacketChoice active' : 'seedPacketChoice'
+              }
+              type="button"
+              key={packet.id}
+              aria-pressed={packet.id === selectedPacketId}
+              onClick={() => choosePacket(packet)}
+            >
+              <span className="packetTopline">Seed Packet No. {packet.packetNo}</span>
+              <span className="packetName">{packet.name}</span>
+              <span className="packetHerb">{packet.herb}</span>
+              <span className="packetCopy">{packet.copy}</span>
+              <span className="packetStage">
+                {packet.petal} / {packet.stage}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        <div className="edenTrustStrip" role="note">
+          <span>
+            <ShieldCheck aria-hidden="true" size={18} />
+            Private first
+          </span>
+          <span>Return only the label</span>
+          <span>Next question grows from consent</span>
         </div>
 
         <ol className="ladder" aria-label="SeedKind growth ladder">
@@ -230,6 +309,7 @@ export function SeedKindEden({ sourceDomain }) {
                 key={label}
                 type="button"
                 onClick={() => {
+                  setSelectedPacketId('');
                   setStage(targetStage);
                   if (openReturn) {
                     setReturnOpen(true);
@@ -245,7 +325,13 @@ export function SeedKindEden({ sourceDomain }) {
           <div className="selectorRow" aria-label="Seed settings">
             <label>
               <span>Stage</span>
-              <select value={stage} onChange={(event) => setStage(event.target.value)}>
+              <select
+                value={stage}
+                onChange={(event) => {
+                  setSelectedPacketId('');
+                  setStage(event.target.value);
+                }}
+              >
                 {growthStages.map((item) => (
                   <option key={item} value={item}>
                     {item}
@@ -255,7 +341,13 @@ export function SeedKindEden({ sourceDomain }) {
             </label>
             <label>
               <span>Petal</span>
-              <select value={petal} onChange={(event) => setPetal(event.target.value)}>
+              <select
+                value={petal}
+                onChange={(event) => {
+                  setSelectedPacketId('');
+                  setPetal(event.target.value);
+                }}
+              >
                 {petals.map((item) => (
                   <option key={item} value={item}>
                     {item}
@@ -267,14 +359,21 @@ export function SeedKindEden({ sourceDomain }) {
 
           <article className="promptPanel" aria-labelledby="seed-prompt-title">
             <div>
-              <p className="kicker">{stage}</p>
-              <h3 id="seed-prompt-title">{activeStage.inquiry}</h3>
-              <p>{activeStage.focus}</p>
+              <p className="kicker">
+                {selectedPacketId ? selectedPacket.name : `${petal} / ${stage}`}
+              </p>
+              <h3 id="seed-prompt-title">Your seed packet is ready.</h3>
+              <p>
+                {activeStage.inquiry} This packet listens for {activeStage.focus}.
+              </p>
             </div>
             <CopyButton text={currentPrompt} label="Copy Seed Packet" />
-            <pre className="promptText" tabIndex="0">
-              {currentPrompt}
-            </pre>
+            <details className="promptTextDisclosure">
+              <summary>Read packet text before copying</summary>
+              <pre className="promptText" tabIndex="0">
+                {currentPrompt}
+              </pre>
+            </details>
           </article>
         </div>
 

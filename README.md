@@ -26,8 +26,8 @@ site system. The implementation stays lightweight and Railway-friendly:
 
 ## Eden: SeedKind Protocol
 
-Eden adds the first living ritual to the sites. Visitors can choose a seed
-packet, plant it in their own ChatGPT, and paste back a plain-text
+Eden adds the first living ritual to the sites. Visitors choose from five seed
+packets, plant one in their own ChatGPT, and paste back a plain-text
 `RETURN_SEED_V1` apothecary label only if they choose.
 
 The SeedKind ladder is:
@@ -39,6 +39,7 @@ Soil -> Seed -> Shoot -> Root -> Stalk -> Leaf -> Bud -> Petal -> Bloom
 The first implementation is copy/paste-first and sovereign by design:
 
 - Prompt reflection happens in the visitor's own ChatGPT.
+- The first Eden screen is a packet shelf, not a form or dashboard.
 - Returned seeds are validated locally before any server request.
 - Nothing leaves the browser until the visitor checks the return-consent box.
 - The first interaction stays light: the return form is tucked behind

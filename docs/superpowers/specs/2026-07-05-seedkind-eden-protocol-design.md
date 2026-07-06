@@ -65,19 +65,21 @@ Intro copy:
 > This protocol runs in your own ChatGPT. Nothing is sent to Bloomin unless you
 > choose to return a seed.
 
-The first screen offers:
+The first screen offers a seed packet shelf before the longer packet text:
 
-- `Begin at Soil`
-- `Choose a Petal`
-- `Return a Label`
-- `Invite a Branch`
+- `Begin in Soil`
+- `Tend the Body`
+- `Family Roots`
+- `Work & Craft`
+- `Giving Shade`
 
-`Begin at Soil` is the recommended path.
+`Begin in Soil` is the recommended path when the visitor is unsure.
 
 ### Copy/Paste Loop
 
-1. Visitor chooses a prompt.
-2. Site displays a SeedKind seed packet.
+1. Visitor chooses a seed packet by feel.
+2. Site prepares the SeedKind seed packet and keeps the longer text behind a
+   disclosure.
 3. Visitor pastes the prompt into their own ChatGPT.
 4. ChatGPT asks questions one at a time.
 5. ChatGPT outputs a reflection plus a structured `RETURN_SEED_V1` block.
