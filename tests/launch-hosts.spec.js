@@ -105,6 +105,11 @@ for (const site of hostCases) {
     await expect(page.getByText(site.role, { exact: true }).first()).toBeVisible();
     await expect(page.getByRole('link', { name: 'Plant a Seed', exact: true }).first()).toBeVisible();
 
+    if (site.host === 'bloom.gdn') {
+      await expect(page.getByText('living apothecary garden', { exact: false })).toBeVisible();
+      await expect(page.getByText('craft, memory, and belonging', { exact: false })).toBeVisible();
+    }
+
     const cycle = page.locator('#bloom-cycle');
     await expect(cycle).toBeVisible();
     await expect(cycle).toContainText('Truth');

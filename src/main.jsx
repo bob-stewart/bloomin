@@ -30,10 +30,11 @@ const sites = [
     roleHeading: 'The invitation people can feel first.',
     roleCopy:
       'Bloom Giving names the public practice: honor what is good, strengthen the soil around one another, and make contribution feel natural before it becomes formal.',
+    rolePromise: 'The first feeling should be welcome: nothing to prove, something good to give.',
     practices: [
-      'Public language for Honor Good',
-      'Belonging-first invitations',
-      'Gift, gratitude, and contribution pathways'
+      'Name the good already alive',
+      'Invite belonging before asking for action',
+      'Turn gratitude into contribution without depletion'
     ]
   },
   {
@@ -51,10 +52,11 @@ const sites = [
     roleHeading: 'Where the root system becomes legible.',
     roleCopy:
       'The Institute turns care into method: protocols, reviews, experiments, and learning loops that make trust measurable without reducing people to metrics.',
+    rolePromise: 'The machinery should feel disciplined, quiet, and accountable beneath the living work.',
     practices: [
-      'AI-IRB stewardship patterns',
-      'AI-SDLC and DOE protocols',
-      'Research notes and learning pathways'
+      'Review AI with dignity as the first requirement',
+      'Turn practice into AI-SDLC and DOE protocols',
+      'Publish learning loops people can understand'
     ]
   },
   {
@@ -72,31 +74,33 @@ const sites = [
     roleHeading: 'Where resources become responsibility.',
     roleCopy:
       'The Foundation protects the giving edge of the ecosystem: capital, recognition, and governance move toward people and communities ready to cultivate durable good.',
+    rolePromise: 'Stewardship should feel like shade: protective, practical, and freely given.',
     practices: [
-      'Grant and scholarship stewardship',
-      'Public-benefit governance',
-      'Honor Good initiatives'
+      'Move resources toward durable good',
+      'Honor quiet merit before it becomes visible',
+      'Protect public benefit with transparent governance'
     ]
   },
   {
     id: 'garden',
     host: 'bloom.gdn',
-    kicker: 'Garden / symbol / living home',
+    kicker: 'Garden / apothecary / living home',
     title: 'Bloom Garden',
     role: 'Garden metaphor / visual ecosystem / living symbolic home',
     theme: 'garden',
     cta: 'Enter the Garden',
     Icon: Flower2,
-    heroLine: 'A living map for the whole ecosystem.',
+    heroLine: 'A living apothecary garden for the whole ecosystem.',
     lede:
-      'A symbolic garden for seeing the relationships among truth, trust, belonging, curiosity, contribution, stewardship, and the condition we call Bloom.',
-    roleHeading: 'Where the pattern can be seen at a glance.',
+      'A garden of labeled beds, remembered remedies, and living maps for seeing the relationships among truth, trust, belonging, curiosity, contribution, stewardship, and the condition we call Bloom.',
+    roleHeading: 'Where the pattern becomes a place to tend.',
     roleCopy:
-      'Bloom Garden gives the movement a visual home: quiet maps, living metaphors, and gentle explanations that help people orient without being overwhelmed.',
+      'Bloom Garden gives the movement a visual home: quiet maps, living metaphors, and gentle explanations arranged like apothecary shelves, paths, beds, shade, and light so people can orient without being overwhelmed.',
+    rolePromise: 'The garden should feel old-souled and useful: beautiful enough to pause in, practical enough to begin from.',
     practices: [
-      'Living symbolic maps',
-      'Ecosystem explainers',
-      'Visual doctrine for Bloom'
+      'Label roots, relationships, and return paths',
+      'Distill complex ideas into plain living remedies',
+      'Make Bloom feel like craft, memory, and belonging'
     ]
   }
 ];
@@ -116,10 +120,11 @@ const defaultSite = {
   roleHeading: 'One shared ecosystem, many doors.',
   roleCopy:
     'This preview carries the same constitution and cycle used by each secured domain while Railway serves the production bundle.',
+  rolePromise: 'A preview should still feel cared for: clean, living, and trustworthy.',
   practices: [
-    'Hostname-aware launch surface',
-    'Shared constitution and cycle',
-    'Railway-ready Vite delivery'
+    'Carry each hostname as a distinct doorway',
+    'Keep the constitution and cycle shared',
+    'Serve the garden lightly from Railway'
   ]
 };
 
@@ -307,19 +312,31 @@ function DomainRole({ site }) {
   return (
     <section id="role" className="roleSection" aria-labelledby="role-title">
       <div className="roleLead">
-        <Icon aria-hidden="true" size={34} />
+        <span className="roleGlyph" aria-hidden="true">
+          <Icon size={30} />
+        </span>
         <p className="kicker">{site.role}</p>
         <h2 id="role-title">{site.roleHeading}</h2>
         <p>{site.roleCopy}</p>
+        <p className="rolePromise">{site.rolePromise}</p>
       </div>
-      <ul className="practiceList" aria-label={`${site.host} practices`}>
-        {site.practices.map((practice) => (
-          <li key={practice}>
-            <Leaf aria-hidden="true" size={18} />
-            <span>{practice}</span>
-          </li>
-        ))}
-      </ul>
+      <div className="plantingPlan" aria-labelledby="planting-plan-title">
+        <div className="plantingPlanHead">
+          <Leaf aria-hidden="true" size={20} />
+          <div>
+            <p className="kicker">Planting plan</p>
+            <h3 id="planting-plan-title">Tend the first three beds.</h3>
+          </div>
+        </div>
+        <ol aria-label={`${site.host} practices`}>
+          {site.practices.map((practice, index) => (
+            <li key={practice}>
+              <span className="planIndex">{String(index + 1).padStart(2, '0')}</span>
+              <span>{practice}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
     </section>
   );
 }
