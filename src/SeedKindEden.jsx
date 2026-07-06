@@ -174,6 +174,10 @@ export function SeedKindEden({ sourceDomain }) {
             Eden gives you copyable prompts we call seeds. The conversation belongs to
             you. Nothing leaves your own ChatGPT unless you choose to return a seed here.
           </p>
+          <p className="edenPromise">
+            Begin privately. Return by choice. Let the next question grow from what is
+            actually alive.
+          </p>
         </div>
 
         <div className="edenNotice" role="note">
