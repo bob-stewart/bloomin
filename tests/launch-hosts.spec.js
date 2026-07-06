@@ -130,14 +130,28 @@ for (const site of hostCases) {
 
     const eden = page.locator('#eden');
     await expect(eden).toBeVisible();
-    await expect(eden).toContainText('Choose a seed packet. Bring back only the label.');
+    await expect(eden).toContainText('Choose the packet that feels closest.');
     await expect(eden).toContainText('private apothecary');
     await expect(eden).toContainText(`Doorway: ${site.host}`);
     await expect(eden).not.toContainText(/copyable prompts/i);
-    await expect(eden.getByRole('img', { name: /seed packets/i })).toBeVisible();
+    if ((page.viewportSize()?.width || 0) > 620) {
+      await expect(eden.getByRole('img', { name: /seed packets/i })).toBeVisible();
+    }
+    await expect(eden.getByRole('button', { name: /Begin in Soil/i })).toBeVisible();
+    await expect(eden.getByRole('button', { name: /Tend the Body/i })).toBeVisible();
+    await expect(eden.getByRole('button', { name: /Family Roots/i })).toBeVisible();
+    await expect(eden.getByRole('button', { name: /Work & Craft/i })).toBeVisible();
+    await expect(eden.getByRole('button', { name: /Giving Shade/i })).toBeVisible();
     for (const stage of ['Soil', 'Seed', 'Shoot', 'Root', 'Stalk', 'Leaf', 'Bud', 'Petal', 'Bloom']) {
       await expect(eden.locator('.ladder')).toContainText(stage);
     }
+
+    await eden.getByRole('button', { name: /Work & Craft/i }).click();
+    await expect(eden.locator('select').first()).toHaveValue('Seed');
+    await expect(eden.locator('select').nth(1)).toHaveValue('Work / Craft');
+    await expect(eden).toContainText('Your seed packet is ready.');
+    await expect(eden).toContainText('Read packet text before copying');
+
     await expect(eden.getByRole('button', { name: 'Begin at Soil', exact: true })).toBeVisible();
     await expect(eden.getByRole('button', { name: 'Copy Seed Packet', exact: true })).toBeVisible();
     await expect(eden).toContainText('well come');
@@ -160,7 +174,17 @@ for (const site of hostCases) {
 
     const brokenImages = await page.locator('img').evaluateAll((images) =>
       images
-        .filter((image) => !image.complete || image.naturalWidth === 0)
+        .filter((image) => {
+          const style = window.getComputedStyle(image);
+          const rect = image.getBoundingClientRect();
+          const isRendered =
+            style.display !== 'none' &&
+            style.visibility !== 'hidden' &&
+            rect.width > 0 &&
+            rect.height > 0;
+
+          return isRendered && (!image.complete || image.naturalWidth === 0);
+        })
         .map((image) => image.currentSrc)
     );
     expect(brokenImages).toEqual([]);
@@ -204,7 +228,9 @@ test('bloom.gdn keeps bloom imagery visible when motion is reduced', async ({ pa
 
   await expect(page.getByRole('img', { name: /flower in full bloom/i })).toBeVisible();
   await expect(page.locator('.bloomSigil')).toBeVisible();
-  await expect(page.locator('#eden').getByRole('img', { name: /seed packets/i })).toBeVisible();
+  if ((page.viewportSize()?.width || 0) > 620) {
+    await expect(page.locator('#eden').getByRole('img', { name: /seed packets/i })).toBeVisible();
+  }
 
   const horizontalOverflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth

@@ -46,6 +46,9 @@ The Playwright smoke suite covers:
 - The hero section renders a real bloom/apothecary image plus lightweight SVG
   circulation art.
 - Eden renders the private apothecary seed-packet path and supporting seed image.
+- Eden presents five seed packet choices before exposing the longer packet text.
+- Mobile Eden goes straight from invitation to packet choices without the
+  secondary image frame.
 - Eden renders the full growth ladder.
 - Eden exposes the SeedKind seed packet without generic prompt placeholder copy.
 - Eden keeps the return label form tucked behind an explicit details disclosure.
@@ -84,6 +87,8 @@ The Playwright smoke suite covers:
 - Each custom domain can render its own role in the shared ecosystem.
 - A visitor can copy a SeedKind seed packet, return a seed label with consent,
   store it in Eden, receive bloom guidance, and copy a coherent next seed.
+- A first-time visitor can choose from the packet shelf before needing to read
+  the full prompt machinery.
 - A first-time visitor can understand that the sites are about human
   flourishing, belonging, contribution, and stewardship before technology.
 - The experience remains clean, responsive, keyboard-accessible, and lightweight.
