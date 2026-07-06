@@ -31,6 +31,11 @@ The Node unit suite covers:
 - Seed prompt sovereignty language.
 - Next-prompt carry-forward.
 - Branch invitation "well come" language.
+- Server-side SeedKind return validation.
+- Consent and contact-permission guardrails.
+- Before/after rating normalization.
+- OpenRouter JSON parsing and prompt message shape.
+- Database-ready seed-return record construction.
 
 The Playwright smoke suite covers:
 
@@ -41,7 +46,8 @@ The Playwright smoke suite covers:
 - Eden renders the full growth ladder.
 - Eden exposes the copyable SeedKind prompt.
 - Eden blocks return-seed tending without consent.
-- Eden accepts a valid returned seed and composes the next prompt.
+- Eden posts a consented returned seed to the API.
+- Eden accepts a stored returned seed response, bloom guidance, and next prompt.
 - Eden renders a branch invitation with welcome language.
 - The Bloom Cycle section includes Truth, Stewardship, and Bloom.
 - The Shared Bloom Constitution includes dignity, stewardship, technology as root
@@ -53,9 +59,13 @@ The Playwright smoke suite covers:
 1. Confirm GitHub contains the Phase 1 branch and `railway.json`.
 2. Confirm Railway builds with `npm run build`.
 3. Confirm Railway starts with `npm start`.
-4. Confirm all four custom domains remain attached to the Railway service.
-5. Verify DNS records at Cloudflare still match Railway's domain instructions.
-6. Probe each public domain over HTTPS and verify the expected hostname-aware
+4. Confirm the app service has `DATABASE_URL` and `OPENROUTER_API_KEY` set.
+5. Confirm all four custom domains remain attached to the Railway service.
+6. Verify DNS records at Cloudflare still match Railway's domain instructions.
+7. Probe `/api/health` and confirm Eden storage and OpenRouter are configured.
+8. Submit one consented live `RETURN_SEED_V1` probe and confirm the response is
+   stored and includes bloom guidance plus the next prompt.
+9. Probe each public domain over HTTPS and verify the expected hostname-aware
    title, hero, cycle, and constitution render.
 
 ## Acceptance Criteria
@@ -64,16 +74,16 @@ The Playwright smoke suite covers:
 - `npm test` exits successfully.
 - `npm run test:smoke:hosts` exits successfully.
 - Each custom domain can render its own role in the shared ecosystem.
-- A visitor can copy a SeedKind prompt, return a seed locally with consent, and
-  receive a coherent next prompt.
+- A visitor can copy a SeedKind prompt, return a seed with consent, store it in
+  Eden, receive bloom guidance, and copy a coherent next prompt.
 - A first-time visitor can understand that the sites are about human
   flourishing, belonging, contribution, and stewardship before technology.
 - The experience remains clean, responsive, keyboard-accessible, and lightweight.
 
 ## Manual Eden Review
 
-- The return form must be honest that the first loop validates locally and does
-  not transmit returned seeds.
+- The return form must be honest that validation starts locally and transmission
+  starts only after consent.
 - Prompt language must respect buried dreams and weathered strengths without
   romanticizing harm.
 - Giving language must invite generosity without depletion.

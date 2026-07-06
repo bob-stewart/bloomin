@@ -78,6 +78,7 @@ export function SeedKindEden({ sourceDomain }) {
   const [feelingAfter, setFeelingAfter] = useState('');
   const [efficacyNote, setEfficacyNote] = useState('');
   const [result, setResult] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentPrompt = useMemo(() => composeSeedPrompt({ stage, petal }), [stage, petal]);
   const branchInvitation = useMemo(
@@ -85,10 +86,13 @@ export function SeedKindEden({ sourceDomain }) {
     [stage, petal]
   );
   const activeStage = stageDetails[stage];
-  const parsedSeed = result?.ok ? result.seed : null;
-  const nextPrompt = parsedSeed ? composeNextPrompt(parsedSeed) : '';
+  const parsedSeed = result?.seed || null;
+  const nextPrompt =
+    result?.nextPrompt ||
+    result?.localNextPrompt ||
+    (parsedSeed?.fields ? composeNextPrompt(parsedSeed) : '');
 
-  function handleReturnSeed(event) {
+  async function handleReturnSeed(event) {
     event.preventDefault();
 
     if (!consent) {
@@ -100,7 +104,59 @@ export function SeedKindEden({ sourceDomain }) {
     }
 
     const parsed = parseReturnSeed(returnedSeed);
-    setResult(parsed);
+
+    if (!parsed.ok) {
+      setResult(parsed);
+      return;
+    }
+
+    setIsSubmitting(true);
+    setResult(null);
+
+    try {
+      const response = await fetch('/api/seed-return', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          sourceDomain,
+          returnSeedText: returnedSeed,
+          consentToReturn: consent,
+          permissionToContact: contactAllowed,
+          name,
+          email,
+          feelingBefore,
+          feelingAfter,
+          efficacyNote
+        })
+      });
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok || !data?.ok) {
+        setResult({
+          ok: false,
+          seed: parsed.seed,
+          localNextPrompt: composeNextPrompt(parsed.seed),
+          errors:
+            data?.errors?.length > 0
+              ? data.errors
+              : ['Eden could not complete the server return. Your local next prompt is still available below.']
+        });
+        return;
+      }
+
+      setResult(data);
+    } catch {
+      setResult({
+        ok: false,
+        seed: parsed.seed,
+        localNextPrompt: composeNextPrompt(parsed.seed),
+        errors: ['Eden could not reach the server. Your local next prompt is still available below.']
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function loadExample() {
@@ -123,9 +179,9 @@ export function SeedKindEden({ sourceDomain }) {
         <div className="edenNotice" role="note">
           <ShieldCheck aria-hidden="true" size={20} />
           <p>
-            Copy first. Reflect privately. Return only what you choose. This first Eden
-            loop validates your returned seed locally and composes the next prompt without
-            sending it across the network.
+            Copy first. Reflect privately. Return only what you choose. Eden validates in
+            your browser first, then sends a consented seed to Bloomin for storage,
+            learning, and a gentle next bloom.
           </p>
         </div>
 
@@ -193,14 +249,19 @@ export function SeedKindEden({ sourceDomain }) {
           </article>
         </div>
 
-        <form className="returnSeedForm" onSubmit={handleReturnSeed} aria-labelledby="return-seed-title">
+        <form
+          className="returnSeedForm"
+          onSubmit={handleReturnSeed}
+          aria-labelledby="return-seed-title"
+          aria-busy={isSubmitting}
+        >
           <div className="returnSeedHead">
             <div>
               <p className="kicker">Return Seed</p>
               <h3 id="return-seed-title">Paste back only what you choose.</h3>
               <p>
-                Eden checks the plain-text seed, honors consent, and gives you the next
-                stacking prompt. Source doorway: {sourceDomain}.
+                Eden checks the plain-text seed, honors consent, stores the returned seed,
+                and gives you the next stacking prompt. Source doorway: {sourceDomain}.
               </p>
             </div>
             <button className="textButton" type="button" onClick={loadExample}>
@@ -284,9 +345,9 @@ export function SeedKindEden({ sourceDomain }) {
             <span>Bloomin may contact me later if I also provided an email.</span>
           </label>
 
-          <button className="button formSubmit" type="submit">
+          <button className="button formSubmit" type="submit" disabled={isSubmitting}>
             <Send aria-hidden="true" size={18} />
-            <span>Tend Returned Seed</span>
+            <span>{isSubmitting ? 'Tending Seed' : 'Tend Returned Seed'}</span>
           </button>
 
           {result && (
@@ -296,10 +357,28 @@ export function SeedKindEden({ sourceDomain }) {
               aria-live="polite"
             >
               {result.ok ? (
-                <p>
-                  Seed received by Eden on this page. Current stage: {result.seed.stage}.
-                  Next prompt: {result.seed.nextStage}.
-                </p>
+                <div>
+                  <p>
+                    Seed returned to Eden. Current stage: {result.seed.stage}. Next
+                    prompt: {result.seed.nextStage}.
+                  </p>
+                  {result.id && (
+                    <p className="resultMeta">
+                      Stored seed: {String(result.id).slice(0, 8)}
+                    </p>
+                  )}
+                  {result.bloom && (
+                    <div className="bloomGuidance" aria-label="Eden bloom guidance">
+                      <p>{result.bloom.message}</p>
+                      <p>
+                        <strong>Practice:</strong> {result.bloom.practice}
+                      </p>
+                      <p>
+                        <strong>Question:</strong> {result.bloom.question}
+                      </p>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <div>
                   <p>Eden needs a little more structure before it can tend this seed.</p>

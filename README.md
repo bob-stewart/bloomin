@@ -12,7 +12,7 @@ shared ecosystem.
 ## Phase 1: Embodied Presence
 
 Phase 1 evolves the launch bundle from a deployment seed into a calmer living
-site system. The implementation stays frontend-only and Railway-friendly:
+site system. The implementation stays lightweight and Railway-friendly:
 
 - Host-aware content is configured in `src/main.jsx`.
 - The Shared Bloom Constitution section introduces the constitutional ethos.
@@ -21,7 +21,7 @@ site system. The implementation stays frontend-only and Railway-friendly:
   Contribution -> Merit -> Stewardship -> Bloom.
 - The SVG hero expresses Root -> Ground -> Flow -> Shine -> Love -> Say -> See
   -> Know with lightweight CSS motion and reduced-motion support.
-- No backend, auth, CMS, dashboards, or heavy animation dependencies are added.
+- No auth, CMS, dashboards, or heavy animation dependencies are added.
 
 ## Eden: SeedKind Protocol
 
@@ -38,10 +38,29 @@ Soil -> Seed -> Shoot -> Root -> Stalk -> Leaf -> Bud -> Petal -> Bloom
 The first implementation is copy/paste-first and sovereign by design:
 
 - Prompt reflection happens in the visitor's own ChatGPT.
-- Nothing is sent across the network by the Eden return form.
-- Returned seeds are validated locally on the page.
-- Eden composes the next stacking prompt from the returned seed.
+- Returned seeds are validated locally before any server request.
+- Nothing leaves the browser until the visitor checks the return-consent box.
+- Consented returned seeds are stored in Railway Postgres through `/api/seed-return`.
+- OpenRouter composes a gentle bloom response; Eden falls back to the local next
+  prompt if model guidance is unavailable.
 - Branch invitations are copyable and framed as welcome, not recruitment.
+
+## Eden API
+
+`npm start` runs a small Node server that serves the Vite build and the Eden API:
+
+- `GET /api/health` reports whether Eden storage and OpenRouter are configured.
+- `POST /api/seed-return` validates consent and `RETURN_SEED_V1`, stores the
+  seed return, and responds with a bloom message plus the next stacking prompt.
+
+Production environment variables:
+
+- `DATABASE_URL` - Railway Postgres connection string, usually referenced from
+  the Postgres service.
+- `OPENROUTER_API_KEY` - OpenRouter key for bloom guidance.
+- `OPENROUTER_MODEL` - optional, defaults to `~openai/gpt-latest`.
+- `OPENROUTER_SITE_URL` - optional app attribution URL, defaults to
+  `https://bloomin.institute`.
 
 ## Local
 
@@ -69,8 +88,11 @@ desktop/mobile overflow guardrails.
 2. In Railway: New Project -> Deploy from GitHub Repo.
 3. Build command: `npm run build`
 4. Start command: `npm start`
-5. Add custom domains in Railway for each secured domain.
-6. Point DNS in Cloudflare as Railway instructs.
+5. Add `DATABASE_URL` from the Railway Postgres service to the app service.
+6. Add `OPENROUTER_API_KEY` to the app service.
+7. Add custom domains in Railway for each secured domain.
+8. Point DNS in Cloudflare as Railway instructs.
 
-The Railway path remains unchanged: build with Vite, start with
-`vite preview`, and serve the same hostname-aware bundle for all four domains.
+The Railway path remains unchanged at the command level: build with
+`npm run build`, start with `npm start`, and serve the same hostname-aware
+bundle for all four domains.
