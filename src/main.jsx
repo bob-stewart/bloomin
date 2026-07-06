@@ -12,6 +12,7 @@ import {
   Sprout
 } from 'lucide-react';
 import './styles.css';
+import bloomApothecaryImage from './assets/bloomin-living-bloom-apothecary.avif';
 import { SeedKindEden } from './SeedKindEden.jsx';
 
 const sites = [
@@ -88,11 +89,11 @@ const sites = [
     title: 'Bloom Garden',
     role: 'Garden metaphor / visual ecosystem / living symbolic home',
     theme: 'garden',
-    cta: 'Enter the Garden',
+    cta: 'Choose a Seed Packet',
     Icon: Flower2,
-    heroLine: 'A living apothecary garden for the whole ecosystem.',
+    heroLine: 'Choose a seed packet. Keep the first conversation yours.',
     lede:
-      'A garden of labeled beds, remembered remedies, and living maps for seeing the relationships among truth, trust, belonging, curiosity, contribution, stewardship, and the condition we call Bloom.',
+      'A living apothecary garden for buried dreams, weathered strength, small practices, and the good still trying to grow. Start privately. Return only the label you want Bloomin to tend.',
     roleHeading: 'Where the pattern becomes a place to tend.',
     roleCopy:
       'Bloom Garden gives the movement a visual home: quiet maps, living metaphors, and gentle explanations arranged like apothecary shelves, paths, beds, shade, and light so people can orient without being overwhelmed.',
@@ -179,17 +180,23 @@ function getHostConfig() {
 
 function BloomHeroArt() {
   return (
-    <figure className="heroArt" aria-label="Root to Bloom circulation">
+    <figure className="heroArt" aria-label="Blooming apothecary garden">
+      <div className="heroArtFrame">
+        <img
+          className="bloomPhoto"
+          src={bloomApothecaryImage}
+          alt="A pink flower in full bloom on an apothecary table with seed packets, herbs, and amber bottles."
+          width="1400"
+          height="788"
+          decoding="async"
+          fetchPriority="high"
+        />
       <svg
-        className="bloomSvg"
+        className="bloomSvg bloomSigil"
         viewBox="0 0 640 640"
-        role="img"
-        aria-labelledby="bloom-art-title bloom-art-desc"
+        aria-hidden="true"
+        focusable="false"
       >
-        <title id="bloom-art-title">Root to Bloom circulation</title>
-        <desc id="bloom-art-desc">
-          Subtle animated roots, ground, circulation paths, and emerging nodes.
-        </desc>
         <defs>
           <linearGradient id="rootGradient" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0%" stopColor="var(--shine)" />
@@ -249,6 +256,7 @@ function BloomHeroArt() {
           d="M320 280 C283 239 286 197 326 164 C365 196 371 239 320 280 Z"
         />
       </svg>
+      </div>
       <figcaption className="motionSequence" aria-label="Bloom motion sequence">
         {motionSteps.map((step) => (
           <span key={step}>{step}</span>
@@ -378,6 +386,7 @@ function EcosystemMap({ currentSite }) {
 function App() {
   const site = getHostConfig();
   const SiteIcon = site.Icon;
+  const isGarden = site.id === 'garden';
 
   return (
     <>
@@ -387,8 +396,8 @@ function App() {
           <span>Bloomin'</span>
         </a>
         <nav className="navlinks" aria-label="Primary">
-          <a href="#role">Role</a>
           <a href="#eden">Plant a Seed</a>
+          <a href="#role">Role</a>
           <a href="#bloom-cycle">Cycle</a>
           <a href="#constitution">Constitution</a>
           <a href="#ecosystem">Sites</a>
@@ -402,14 +411,14 @@ function App() {
             <p className="heroLine">{site.heroLine}</p>
             <p className="lede">{site.lede}</p>
             <div className="actions" aria-label="Primary actions">
-              <a className="button" href="#role">
+              <a className="button" href={isGarden ? '#eden' : '#role'}>
                 <SiteIcon aria-hidden="true" size={18} />
                 <span>{site.cta}</span>
                 <ArrowRight aria-hidden="true" size={18} />
               </a>
-              <a className="button seedCta" href="#eden">
+              <a className="button seedCta" href={isGarden ? '#role' : '#eden'}>
                 <Sprout aria-hidden="true" size={18} />
-                <span>Plant a Seed</span>
+                <span>{isGarden ? 'Enter the Garden' : 'Plant a Seed'}</span>
               </a>
               <a className="quietLink" href="#bloom-cycle">
                 See the cycle
@@ -419,8 +428,8 @@ function App() {
           <BloomHeroArt />
         </section>
 
-        <DomainRole site={site} />
         <SeedKindEden sourceDomain={site.host} />
+        <DomainRole site={site} />
         <BloomCycle />
         <BloomConstitution />
         <EcosystemMap currentSite={site} />

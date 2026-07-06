@@ -48,7 +48,12 @@ a {
 }
 
 a:focus-visible,
-button:focus-visible {
+button:focus-visible,
+summary:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+.promptText:focus-visible {
   outline: 3px solid rgba(49, 82, 56, 0.35);
   outline-offset: 4px;
 }
@@ -162,6 +167,7 @@ button:disabled {
 }
 
 .heroCopy {
+  min-width: 0;
   max-width: 760px;
 }
 
@@ -180,6 +186,7 @@ button:disabled {
   font-size: 5.25rem;
   line-height: 0.98;
   letter-spacing: 0;
+  overflow-wrap: break-word;
 }
 
 .heroLine {
@@ -189,6 +196,7 @@ button:disabled {
   font-weight: 760;
   line-height: 1.25;
   letter-spacing: 0;
+  overflow-wrap: break-word;
 }
 
 .lede {
@@ -198,6 +206,7 @@ button:disabled {
   font-size: 1.14rem;
   line-height: 1.68;
   letter-spacing: 0;
+  overflow-wrap: break-word;
 }
 
 .actions {
@@ -239,9 +248,35 @@ button:disabled {
 
 .heroArt {
   width: 100%;
+  min-width: 0;
   max-width: 560px;
   margin: 0;
   justify-self: end;
+}
+
+.heroArtFrame {
+  position: relative;
+  aspect-ratio: 1400 / 788;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-warm);
+  box-shadow: 0 28px 70px rgba(59, 49, 40, 0.16);
+}
+
+.bloomPhoto {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.edenBloomImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1200 / 676;
+  object-fit: cover;
 }
 
 .bloomSvg {
@@ -249,6 +284,23 @@ button:disabled {
   width: 100%;
   height: auto;
   overflow: visible;
+}
+
+.bloomSigil {
+  position: absolute;
+  right: 4%;
+  bottom: 2%;
+  width: 42%;
+  max-width: 260px;
+  min-width: 160px;
+  opacity: 0.58;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  filter: drop-shadow(0 10px 18px rgba(33, 59, 41, 0.18));
+}
+
+.bloomSigil .gardenGlow {
+  opacity: 0.34;
 }
 
 .gardenGlow {
@@ -336,7 +388,7 @@ button:disabled {
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin-top: -10px;
+  margin-top: 14px;
   color: var(--soil-soft);
   font-size: 0.88rem;
   font-weight: 760;
@@ -358,6 +410,7 @@ section {
 }
 
 .sectionIntro {
+  min-width: 0;
   max-width: 850px;
   margin-bottom: 30px;
 }
@@ -415,6 +468,7 @@ section {
 .roleLead {
   position: relative;
   z-index: 1;
+  min-width: 0;
   padding: 20px 0;
 }
 
@@ -687,6 +741,13 @@ section {
   gap: 24px;
 }
 
+.edenThreshold {
+  display: grid;
+  grid-template-columns: minmax(0, 0.96fr) minmax(280px, 0.54fr);
+  gap: 32px;
+  align-items: end;
+}
+
 .edenIntro {
   margin-bottom: 0;
 }
@@ -721,6 +782,26 @@ section {
 .edenNotice p {
   margin: 0;
   line-height: 1.6;
+}
+
+.edenImagePanel {
+  align-self: stretch;
+  margin: 0;
+}
+
+.edenImagePanel img {
+  min-height: 260px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 24px 58px rgba(59, 49, 40, 0.13);
+}
+
+.edenImagePanel figcaption {
+  margin-top: 10px;
+  color: var(--soil-soft);
+  font-size: 0.9rem;
+  font-weight: 760;
+  line-height: 1.4;
 }
 
 .ladder {
@@ -851,7 +932,7 @@ textarea {
 }
 
 .promptPanel,
-.returnSeedForm,
+.returnSeedDetails,
 .nextPrompt,
 .branchInvite {
   padding: 24px;
@@ -866,6 +947,41 @@ textarea {
 .promptPanel {
   display: grid;
   gap: 16px;
+}
+
+.returnSeedDetails {
+  display: grid;
+  gap: 16px;
+}
+
+.returnSeedDetails summary {
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  padding: 12px 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 999px;
+  color: var(--soil);
+  background: rgba(255, 253, 247, 0.78);
+  font-weight: 850;
+  cursor: pointer;
+  list-style: none;
+}
+
+.returnSeedDetails summary::-webkit-details-marker {
+  display: none;
+}
+
+.returnSeedDetails summary svg {
+  color: var(--accent);
+}
+
+.returnSeedDetails[open] summary {
+  margin-bottom: 16px;
+  color: var(--accent-strong);
+  background: var(--paper);
 }
 
 .promptPanel h3,
@@ -923,6 +1039,7 @@ textarea {
 .returnSeedForm {
   display: grid;
   gap: 18px;
+  padding-top: 6px;
 }
 
 .returnSeedHead {
@@ -1128,8 +1245,13 @@ textarea {
     justify-self: center;
   }
 
+  .bloomSigil {
+    width: 38%;
+    min-width: 136px;
+  }
+
   .motionSequence {
-    margin-top: -4px;
+    margin-top: 12px;
   }
 
   section {
@@ -1147,6 +1269,15 @@ textarea {
     gap: 16px;
   }
 
+  .edenThreshold {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .edenImagePanel img {
+    min-height: 220px;
+  }
+
   .constitutionGrid {
     grid-template-columns: 1fr;
   }
@@ -1162,7 +1293,9 @@ textarea {
   }
 
   .hero {
-    padding-top: 34px;
+    gap: 18px;
+    padding-top: 28px;
+    padding-bottom: 22px;
   }
 
   .hero h1 {
@@ -1171,11 +1304,16 @@ textarea {
 
   .actions {
     align-items: stretch;
+    margin-top: 22px;
   }
 
   .button,
   .quietLink {
     width: 100%;
+  }
+
+  .quietLink {
+    min-height: 36px;
   }
 
   .motionSequence {
@@ -1218,8 +1356,14 @@ textarea {
 
   .formSubmit,
   .textButton,
-  .copyButton {
+  .copyButton,
+  .returnSeedDetails summary {
     width: 100%;
+  }
+
+  .bloomSigil {
+    min-width: 118px;
+    opacity: 0.5;
   }
 }
 

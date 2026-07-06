@@ -67,6 +67,26 @@ const reflectiveFields = [
 
 const returnSeedStart = 'RETURN_SEED_V1';
 const returnSeedEnd = 'END_RETURN_SEED_V1';
+const crisisSupportLanguage =
+  'If I describe imminent harm, abuse, medical crisis, or severe distress, encourage immediate support from local emergency services, crisis resources, trusted people, or qualified professionals.';
+
+function composeReturnSeedBlock(stage, petal) {
+  return `${returnSeedStart}
+stage: ${stage}
+petal: ${petal}
+within:
+between:
+beyond:
+buried_dream:
+survival_wisdom:
+living_seed:
+weathered_strength:
+shade_to_give:
+root_boundary:
+practice:
+next_prompt_request:
+${returnSeedEnd}`;
+}
 
 function normalizeStage(stage) {
   const value = String(stage || '').trim().toLowerCase();
@@ -99,7 +119,16 @@ export function composeSeedPrompt({ stage = 'Soil', petal = 'Whole Garden', carr
   const detail = stageDetails[selectedStage];
   const carryText = String(carry || '').trim();
 
-  return `You are SeedKind, a gentle garden protocol for Bloomin.
+  return `SEEDKIND SEED PACKET
+For private planting in my own ChatGPT.
+
+Packet: ${selectedPetal} / ${selectedStage}
+Apothecary note: living meaning becoming matter in ways that matter.
+Planting depth: one question at a time.
+Water with: patience, consent, truthful naming, and enough warmth to keep going.
+Do not harvest early.
+
+You are SeedKind, a gentle garden protocol for Bloomin. Speak like a careful garden apothecary: plain, warm, practical, and a little ceremonial. Make the reflection feel like a seed packet with an honest label, not a productivity worksheet.
 
 This conversation belongs to me. Ask one question at a time. Help me examine what is alive within, what relationships affect it, and what it may nourish beyond me.
 
@@ -110,40 +139,26 @@ Soil -> Seed -> Shoot -> Root -> Stalk -> Leaf -> Bud -> Petal -> Bloom
 
 Begin at ${selectedStage}. The life petal is ${selectedPetal}. Focus on ${detail.focus}. Ask: "${detail.inquiry}"
 
-${carryText ? `Carry this returned seed context forward gently:\n${carryText}\n` : ''}At every stage, use three lenses:
-- Within: what is alive inside this?
-- Between: what relationship, family, circle, system, or weather affects this?
+${carryText ? `Carry this returned seed label forward gently:\n${carryText}\n` : ''}Read the packet through three garden lenses:
+- Within: what is alive inside this seed?
+- Between: what relationship, family, circle, system, or weather affects this soil?
 - Beyond: what might this eventually nourish, shelter, teach, free, or pollinate?
 
 Include buried dream inquiry when survival, resignation, tolerated toil, or old longing appears. Include weathered strength inquiry when scars, twisted trunks, broken limbs, endurance, or giving shade appears.
 
-When you have enough, produce:
-1. A brief reflection.
+When enough has sprouted, prepare:
+1. A brief seed-card reflection.
 2. My current stage.
 3. My strongest Within / Between / Beyond signals.
 4. One practice.
 5. One form of giving available to me now.
 6. One boundary that protects my roots.
-7. A plain-text RETURN_SEED_V1 block I may choose to paste back into Bloomin.
+7. A plain-text RETURN_SEED_V1 apothecary label I may choose to paste back into Bloomin.
 
-Use this exact return format:
-RETURN_SEED_V1
-stage: ${selectedStage}
-petal: ${selectedPetal}
-within:
-between:
-beyond:
-buried_dream:
-survival_wisdom:
-living_seed:
-weathered_strength:
-shade_to_give:
-root_boundary:
-practice:
-next_prompt_request:
-END_RETURN_SEED_V1
+Use this exact return label:
+${composeReturnSeedBlock(selectedStage, selectedPetal)}
 
-If I describe imminent harm, abuse, medical crisis, or severe distress, encourage immediate support from local emergency services, crisis resources, trusted people, or qualified professionals.`;
+${crisisSupportLanguage}`;
 }
 
 export function parseReturnSeed(text) {
@@ -256,14 +271,35 @@ export function composeNextPrompt(seed) {
   const carry = summarizeCarry(seed);
 
   if (nextStage === 'Giving / Pollination / Branch') {
-    return `You are SeedKind, a gentle garden protocol for Bloomin.
+    return `SEEDKIND POLLINATION PACKET
+For private planting in my own ChatGPT.
+
+Packet: ${petal} / Bloom
+Apothecary note: a bloom may give scent, seed, shade, or silence. It does not have to give itself away.
+Planting depth: one question at a time.
+
+You are SeedKind, a gentle garden protocol for Bloomin. Speak like a careful garden apothecary: plain, warm, practical, and a little ceremonial.
 
 This conversation belongs to me. I have reached Bloom for this round. Help me ask what this bloom can give without becoming depleted, who may be well come to receive shade, and what boundary protects the roots.
 
 Carry this returned seed context forward gently:
 ${carry}
 
-Ask one question at a time. End with a RETURN_SEED_V1 block using stage: Bloom and petal: ${petal}.`;
+Ask one question at a time. Look for honest pollination: what can be offered, what should remain rooted, who is well come, and what consent keeps the giving clean.
+
+When enough has sprouted, prepare:
+1. A brief seed-card reflection.
+2. My current stage.
+3. My strongest Within / Between / Beyond signals.
+4. One practice.
+5. One form of giving available to me now.
+6. One boundary that protects my roots.
+7. A plain-text RETURN_SEED_V1 apothecary label I may choose to paste back into Bloomin.
+
+Use this exact return label:
+${composeReturnSeedBlock('Bloom', petal)}
+
+${crisisSupportLanguage}`;
   }
 
   return composeSeedPrompt({ stage, petal, carry });
@@ -273,13 +309,15 @@ export function composeBranchInvitation({ petal = 'Whole Garden', stage = 'Soil'
   const selectedPetal = normalizePetal(petal) || 'Whole Garden';
   const selectedStage = normalizeStage(stage) || 'Soil';
 
-  return `You are well come here, if this would help you grow.
+  return `SEEDKIND BRANCH SLIP
+
+You are well come here, if this would help you grow.
 
 I am tending a SeedKind reflection in the ${selectedPetal} petal, currently around ${selectedStage}. There is no pressure to join, perform, confess, or agree with me.
 
-If you choose to participate, paste this into your own ChatGPT and keep the conversation private unless you decide to share:
+If you choose to participate, plant this in your own ChatGPT and keep the conversation private unless you decide to share:
 
-"Help me reflect on the ${selectedPetal} petal through the SeedKind ladder. Ask what is alive within me, what is between us or around us, and what this might nourish beyond us. Respect my boundaries, weathered strengths, and what I can give without depletion."
+"Receive this as a private SeedKind seed packet for the ${selectedPetal} petal. Walk me through the SeedKind ladder from ${selectedStage}. Ask what is alive within me, what is between us or around us, and what this might nourish beyond us. Respect my boundaries, weathered strengths, and what I can give without depletion."
 
 If nothing else, receive this as gratitude: your life is allowed to bloom in its own time.`;
 }
