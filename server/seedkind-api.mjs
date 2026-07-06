@@ -67,11 +67,11 @@ export function validateSeedReturnPayload(payload) {
   const returnSeedText = String(payload.returnSeedText || '').trim();
 
   if (!returnSeedText) {
-    errors.push('Returned seed text is required.');
+    errors.push('Returned seed label is required.');
   }
 
   if (returnSeedText.length > MAX_SEED_TEXT_LENGTH) {
-    errors.push(`Returned seed text must be ${MAX_SEED_TEXT_LENGTH} characters or fewer.`);
+    errors.push(`Returned seed label must be ${MAX_SEED_TEXT_LENGTH} characters or fewer.`);
   }
 
   if (!validateEmail(email)) {

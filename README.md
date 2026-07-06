@@ -19,15 +19,16 @@ site system. The implementation stays lightweight and Railway-friendly:
 - The Bloom Cycle section renders the full ecosystem loop:
   Truth -> Trust -> Belonging -> Curiosity -> Exploration -> Competence ->
   Contribution -> Merit -> Stewardship -> Bloom.
-- The SVG hero expresses Root -> Ground -> Flow -> Shine -> Love -> Say -> See
-  -> Know with lightweight CSS motion and reduced-motion support.
+- The hero pairs local compressed bloom/apothecary imagery with a lightweight
+  SVG circulation sigil for Root -> Ground -> Flow -> Shine -> Love -> Say ->
+  See -> Know. Motion respects reduced-motion preferences.
 - No auth, CMS, dashboards, or heavy animation dependencies are added.
 
 ## Eden: SeedKind Protocol
 
-Eden adds the first living ritual to the sites. Visitors can click
-`Plant a Seed`, copy a SeedKind prompt, run it in their own ChatGPT, and paste
-back a plain-text `RETURN_SEED_V1` block only if they choose.
+Eden adds the first living ritual to the sites. Visitors can choose a seed
+packet, plant it in their own ChatGPT, and paste back a plain-text
+`RETURN_SEED_V1` apothecary label only if they choose.
 
 The SeedKind ladder is:
 
@@ -40,6 +41,8 @@ The first implementation is copy/paste-first and sovereign by design:
 - Prompt reflection happens in the visitor's own ChatGPT.
 - Returned seeds are validated locally before any server request.
 - Nothing leaves the browser until the visitor checks the return-consent box.
+- The first interaction stays light: the return form is tucked behind
+  `Already have a returned seed label?`.
 - Consented returned seeds are stored in Railway Postgres through `/api/seed-return`.
 - OpenRouter composes a gentle bloom response; Eden falls back to the local next
   prompt if model guidance is unavailable.
@@ -79,8 +82,9 @@ npm run test:smoke:hosts
 
 The unit suite verifies the SeedKind protocol parser and prompt composers. The
 Playwright smoke suite verifies all accepted hostnames, each domain's identity
-and CTA, the hero SVG, Eden, the Bloom Cycle, the Shared Bloom Constitution, and
-desktop/mobile overflow guardrails.
+and CTA, local hero/Eden imagery, the reduced-motion state, Eden, the Bloom
+Cycle, the Shared Bloom Constitution, and 320/375/768/1440 viewport overflow
+guardrails.
 
 ## Railway
 

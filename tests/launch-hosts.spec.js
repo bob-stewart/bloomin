@@ -25,7 +25,7 @@ const hostCases = [
   {
     host: 'bloom.gdn',
     title: 'Bloom Garden',
-    cta: 'Enter the Garden',
+    cta: 'Choose a Seed Packet',
     role: 'Garden metaphor / visual ecosystem / living symbolic home',
     theme: 'garden'
   }
@@ -98,15 +98,20 @@ for (const site of hostCases) {
     await page.goto(`http://${site.host}:4173/`);
 
     await expect(page.locator('#hero')).toBeVisible();
-    await expect(page.getByRole('img', { name: 'Root to Bloom circulation' })).toBeVisible();
+    await expect(page.getByRole('img', { name: /flower in full bloom/i })).toBeVisible();
     await expect(page.getByRole('heading', { name: site.title, level: 1 })).toBeVisible();
-    await expect(page.getByRole('link', { name: site.cta, exact: true })).toBeVisible();
+    await expect(page.locator('#hero').getByRole('link', { name: site.cta, exact: true })).toBeVisible();
+    await expect(
+      page
+        .locator('#hero')
+        .getByRole('link', { name: site.host === 'bloom.gdn' ? 'Enter the Garden' : 'Plant a Seed', exact: true })
+    ).toBeVisible();
     await expect(page.locator('.site')).toHaveClass(new RegExp(`site-${site.theme}`));
     await expect(page.getByText(site.role, { exact: true }).first()).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Plant a Seed', exact: true }).first()).toBeVisible();
 
     if (site.host === 'bloom.gdn') {
-      await expect(page.getByText('living apothecary garden', { exact: false })).toBeVisible();
+      await expect(page.getByText('Choose a seed packet. Keep the first conversation yours.')).toBeVisible();
+      await expect(page.getByText('buried dreams, weathered strength', { exact: false })).toBeVisible();
       await expect(page.getByText('craft, memory, and belonging', { exact: false })).toBeVisible();
     }
 
@@ -125,30 +130,84 @@ for (const site of hostCases) {
 
     const eden = page.locator('#eden');
     await expect(eden).toBeVisible();
+    await expect(eden).toContainText('Choose a seed packet. Bring back only the label.');
+    await expect(eden).toContainText('private apothecary');
+    await expect(eden).toContainText(`Doorway: ${site.host}`);
+    await expect(eden).not.toContainText(/copyable prompts/i);
+    await expect(eden.getByRole('img', { name: /seed packets/i })).toBeVisible();
     for (const stage of ['Soil', 'Seed', 'Shoot', 'Root', 'Stalk', 'Leaf', 'Bud', 'Petal', 'Bloom']) {
       await expect(eden.locator('.ladder')).toContainText(stage);
     }
     await expect(eden.getByRole('button', { name: 'Begin at Soil', exact: true })).toBeVisible();
-    await expect(eden.getByRole('button', { name: 'Copy Seed Prompt', exact: true })).toBeVisible();
+    await expect(eden.getByRole('button', { name: 'Copy Seed Packet', exact: true })).toBeVisible();
     await expect(eden).toContainText('well come');
 
-    await eden.getByRole('button', { name: 'Tend Returned Seed', exact: true }).click();
+    await eden.getByRole('button', { name: 'Return a Label', exact: true }).click();
+    await expect(eden.getByText('Already have a returned seed label?')).toBeVisible();
+    await eden.getByRole('button', { name: 'Tend This Seed', exact: true }).click();
     await expect(eden).toContainText('Consent is required');
 
-    await eden.getByLabel('Returned seed text').fill(validReturnSeed);
+    await eden.getByLabel('Returned seed label').fill(validReturnSeed);
     await eden
-      .getByLabel('I choose to return this seed to Eden on this page for tending and learning.')
+      .getByLabel('I choose to return this seed label to Eden for tending and learning.')
       .check();
-    await eden.getByRole('button', { name: 'Tend Returned Seed', exact: true }).click();
-    await expect(eden).toContainText('Seed returned to Eden');
-    await expect(eden).toContainText('Next prompt: Seed');
+    await eden.getByRole('button', { name: 'Tend This Seed', exact: true }).click();
+    await expect(eden).toContainText('Seed label returned');
+    await expect(eden).toContainText('Next question: Seed');
     await expect(eden).toContainText('The living seed is still warm');
     await expect(eden).toContainText('Stored seed: 11111111');
-    await expect(eden.getByRole('button', { name: 'Copy Next Prompt', exact: true })).toBeVisible();
+    await expect(eden.getByRole('button', { name: 'Copy Next Seed', exact: true })).toBeVisible();
+
+    const brokenImages = await page.locator('img').evaluateAll((images) =>
+      images
+        .filter((image) => !image.complete || image.naturalWidth === 0)
+        .map((image) => image.currentSrc)
+    );
+    expect(brokenImages).toEqual([]);
 
     const horizontalOverflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth
     );
     expect(horizontalOverflow).toBeLessThanOrEqual(1);
+
+    const clippedText = await page.evaluate(() =>
+      [
+        ...document.querySelectorAll(
+          'h1, h2, .heroLine, .lede, .sectionIntro p, .roleLead p, .button, .quietLink'
+        )
+      ]
+        .filter((element) => {
+          const style = window.getComputedStyle(element);
+          const rect = element.getBoundingClientRect();
+
+          return (
+            style.display !== 'none' &&
+            style.visibility !== 'hidden' &&
+            rect.width > 0 &&
+            (rect.left < -1 || rect.right > window.innerWidth + 1)
+          );
+        })
+        .map((element) => ({
+          text: element.textContent.trim().slice(0, 80),
+          left: Math.round(element.getBoundingClientRect().left),
+          right: Math.round(element.getBoundingClientRect().right),
+          viewport: window.innerWidth
+        }))
+    );
+    expect(clippedText).toEqual([]);
   });
 }
+
+test('bloom.gdn keeps bloom imagery visible when motion is reduced', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('http://bloom.gdn:4173/');
+
+  await expect(page.getByRole('img', { name: /flower in full bloom/i })).toBeVisible();
+  await expect(page.locator('.bloomSigil')).toBeVisible();
+  await expect(page.locator('#eden').getByRole('img', { name: /seed packets/i })).toBeVisible();
+
+  const horizontalOverflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+  );
+  expect(horizontalOverflow).toBeLessThanOrEqual(1);
+});

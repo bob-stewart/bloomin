@@ -69,6 +69,19 @@ test('composeSeedPrompt includes the selected stage and sovereignty language', (
   assert.match(prompt, /Faith/);
 });
 
+test('composeSeedPrompt reads like an apothecary seed packet while preserving the return contract', () => {
+  const prompt = composeSeedPrompt({ stage: 'Bud', petal: 'Health' });
+
+  assert.match(prompt, /SEEDKIND SEED PACKET/);
+  assert.match(prompt, /apothecary/i);
+  assert.match(prompt, /Planting depth: one question at a time/);
+  assert.doesNotMatch(prompt, /copyable prompts|AI productivity|generic prompt/i);
+  assert.match(
+    prompt,
+    /RETURN_SEED_V1\nstage: Bud\npetal: Health\nwithin:\nbetween:\nbeyond:\nburied_dream:\nsurvival_wisdom:\nliving_seed:\nweathered_strength:\nshade_to_give:\nroot_boundary:\npractice:\nnext_prompt_request:\nEND_RETURN_SEED_V1/
+  );
+});
+
 test('composeNextPrompt advances stage and carries living seed language', () => {
   const parsed = parseReturnSeed(validSeed);
   const prompt = composeNextPrompt(parsed.seed);
@@ -76,6 +89,16 @@ test('composeNextPrompt advances stage and carries living seed language', () => 
   assert.match(prompt, /Begin at Seed/);
   assert.match(prompt, /I still hear melodies/);
   assert.match(prompt, /root boundary/i);
+});
+
+test('composeNextPrompt keeps Bloom pollination inside the seed contract and safety rail', () => {
+  const parsed = parseReturnSeed(validSeed.replace('stage: Soil', 'stage: Bloom'));
+  const prompt = composeNextPrompt(parsed.seed);
+
+  assert.match(prompt, /pollination/i);
+  assert.match(prompt, /RETURN_SEED_V1\nstage: Bloom\npetal: Whole Garden\nwithin:/);
+  assert.match(prompt, /local emergency services/);
+  assert.match(prompt, /crisis resources/);
 });
 
 test('composeBranchInvitation produces well-come language', () => {

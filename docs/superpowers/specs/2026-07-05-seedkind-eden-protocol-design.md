@@ -12,9 +12,9 @@ Eden is the first living protocol surface of Bloomin. It is not a perfect
 garden. It is a tended beginning where a visitor can bring what still matters,
 notice what survived, and give it a truthful form.
 
-SeedKind is the protocol inside Eden. It gives visitors copyable prompts they
-run in their own ChatGPT instance. The visitor owns the conversation. Bloomin
-only receives what the visitor intentionally returns.
+SeedKind is the protocol inside Eden. It gives visitors seed packets they plant
+in their own ChatGPT instance. The visitor owns the conversation. Bloomin only
+receives the apothecary label the visitor intentionally returns.
 
 The goal is to help living meaning become matter in ways that matter.
 
@@ -68,8 +68,8 @@ Intro copy:
 The first screen offers:
 
 - `Begin at Soil`
-- `Open a Petal`
-- `Return a Seed`
+- `Choose a Petal`
+- `Return a Label`
 - `Invite a Branch`
 
 `Begin at Soil` is the recommended path.
@@ -77,25 +77,25 @@ The first screen offers:
 ### Copy/Paste Loop
 
 1. Visitor chooses a prompt.
-2. Site displays a copyable SeedKind prompt.
+2. Site displays a SeedKind seed packet.
 3. Visitor pastes the prompt into their own ChatGPT.
 4. ChatGPT asks questions one at a time.
 5. ChatGPT outputs a reflection plus a structured `RETURN_SEED_V1` block.
 6. Visitor may keep it private or paste the returned seed back into Eden.
-7. Eden validates the returned seed and offers the next prompt.
+7. Eden validates the returned seed label and offers the next seed.
 
 This creates the stacking-doll mechanic:
 
-`Prompt -> Reflection -> Return Seed -> Next Prompt -> Deeper Reflection`
+`Seed Packet -> Reflection -> Return Label -> Next Seed -> Deeper Reflection`
 
 ### Optional Return Form
 
-The Return Seed form is consent-first.
+The Return Label form is consent-first.
 
 Required:
 
-- returned seed text
-- consent checkbox: `I choose to return this seed to Bloomin for tending and learning.`
+- returned seed label
+- consent checkbox: `I choose to return this seed label to Eden for tending and learning.`
 
 Optional:
 
@@ -430,7 +430,7 @@ Rules:
 - `Bloom` returns `Giving / Pollination / Branch`
 
 If `buried_dream`, `weathered_strength`, or `root_boundary` is strong in the
-returned seed, the next prompt carries that language forward so the protocol
+returned seed label, the next seed carries that language forward so the protocol
 feels continuous.
 
 ## Optional Survey Layer
@@ -501,7 +501,7 @@ Eden surface sections:
 1. Invitation
 2. Growth Ladder
 3. Prompt Garden
-4. Return a Seed
+4. Return a Label
 5. Branch Invitation
 6. Privacy and Consent
 
@@ -519,13 +519,13 @@ Displays Soil -> Bloom and explains each stage.
 
 Lists prompt entry points and renders the active prompt.
 
-### CopyPromptButton
+### CopySeedPacketButton
 
-Copies prompt text and announces success accessibly.
+Copies seed packet text and announces success accessibly.
 
-### ReturnSeedForm
+### ReturnLabelForm
 
-Collects returned seed text, consent, optional contact fields, and optional
+Collects returned seed label, consent, optional contact fields, and optional
 survey fields.
 
 ### ReturnSeedParser
@@ -534,7 +534,7 @@ Parses and validates `RETURN_SEED_V1` text.
 
 ### NextPromptComposer
 
-Creates the next prompt from validated returned seed fields.
+Creates the next seed from validated returned seed fields.
 
 ### BranchInvite
 
@@ -584,7 +584,7 @@ consentful return path. It includes:
 - copy-to-clipboard
 - return seed parsing
 - optional return form
-- next prompt composition
+- next seed composition
 - branch invitation
 - tests and README updates
 
@@ -599,7 +599,7 @@ A first-time visitor can:
 2. copy a SeedKind prompt
 3. receive a reflection and returned seed from ChatGPT
 4. paste the returned seed back into Bloomin only if they choose
-5. receive a coherent next prompt
+5. receive a coherent next seed
 6. see how the protocol respects buried dreams, weathered strengths, giving,
    boundaries, and branch invitations
 7. leave without submitting anything and still retain value
